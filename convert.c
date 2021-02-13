@@ -86,14 +86,29 @@ int validate_and_parse_input(char * input, double * temperature, char * scale) {
 
 }
 
-//Converts celcius to fahrenheit
+//Converts celcius to fahrenheit.
 double celsius_to_farenheit(double celsius) {
     return ((celsius * 9) / (double) 5) + 32;
 }
 
-//Converts fahrenheit to celcius
+//Converts fahrenheit to celcius.
 double fahrenheit_to_celsius(double fahrenheit) {
     return (fahrenheit - 32) * 5 / (double) 9;
+}
+
+// Prints error message for bad input.
+void print_usage() {
+    printf("ERROR: PLEASE ENTER INPUT IN VALID FORMAT");
+}
+
+// Prints correct output based on cases from validate_and_parse
+void print_output(double celsius, double fahrenheit, char scale) {
+    if (scale == 'C')
+        printf("\nCelsius: %f | Fahrenheit: %f", celsius, fahrenheit);
+    else if (scale == 'F')
+        printf("\nFahrenheit: %f | Celsius: %f", fahrenheit, celsius);
+    else
+        printf("INTERNAL ERROR: SCALE IMPROPER VALUE");
 }
 
 // Gets input and organizes function calls
