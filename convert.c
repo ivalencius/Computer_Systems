@@ -4,7 +4,9 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
+// SUCCESS == 0 so need '!(fxn)' for correct if statements 
 #define ERROR 1
 #define SUCCESS 0
 
@@ -28,7 +30,6 @@ int is_floating_point_number(char* input){
     bool dot = false;
     for(int i = 1; input[i] !=0; i++) {
         c = input[i];
-        printf("\n%c\n",c);
         if (c == '.') {
             // If one '.' already found, return ERROR.
             if (dot)
@@ -40,7 +41,6 @@ int is_floating_point_number(char* input){
         // If not a digit, return ERROR.
         else if (!is_digit(c))
             return ERROR;
-        printf("\t%d",dot);
     }
     return (dot ? SUCCESS : ERROR);
 }
@@ -49,7 +49,6 @@ int is_floating_point_number(char* input){
 int is_integer(char* input){
      // c refers to the first character in the string "input".
     char c = *input;
-    printf("\n%c\n",c);
     // Checks if first char is either a digit or '+'/'-'.
     if (!(is_digit(c) || (c == '+') || (c == '-')))
         return ERROR;
@@ -57,19 +56,61 @@ int is_integer(char* input){
     for(int i = 1; input[i] !=0; i++) {
         // If not a digit, return ERROR.
         c = input[i];
-        printf("\n%c\n",c);
         if (!is_digit(c))
             return ERROR;
     }
     return SUCCESS;
 }
 
+//Checks if string ends in 'C' or 'F' then stores the string as a double in &temperature.
+int validate_and_parse_input(char * input, double * temperature, char * scale) {
+    int length = strlen(input);
+    // Determine if terminating char is 'C' or 'F'
+    char terminator = input[length-1];
+    if (terminator == 'C' || terminator == 'F')
+        *scale = terminator;
+    else 
+        return ERROR;
+    // Replace terminating char with '\0' (need to make new string)
+    char input_copy[length+1];
+    strcpy(input_copy, input); 
+    input_copy[length-1] = '\0';
+    // Check if floating point
+    if (!is_floating_point_number(input_copy))
+        *temperature = strtod(input_copy, NULL);
+    else if (!is_integer(input_copy))
+        *temperature = (double)atoi(input_copy);
+    else 
+        return ERROR;
+    return SUCCESS;
+
+}
+
+//Converts celcius to fahrenheit
+double celsius_to_farenheit(double celsius) {
+    return ((celsius * 9) / (double) 5) + 32;
+}
+
+//Converts fahrenheit to celcius
+double fahrenheit_to_celsius(double fahrenheit) {
+    return (fahrenheit - 32) * 5 / (double) 9;
+}
+
+// Gets input and organizes function calls
 int main(int argc, char *argv[]) {
-    char* f = "+25.4.3";
-    char* i = "-12.49";
-    //char* fp = f.c_str();
-    //char* ip = i.c_str();
-    char digit = 'a';
-    if (!is_floating_point_number(f))
-        printf("\nSUCCESS\n");
+    char* f = "+25.43F";
+    char* i = "-1249C";
+    //int length = strlen(f);
+    //printf("\nInput ptr: \%c\n", f[length-1]);
+    double temperature_val;
+    double* temperature = &temperature_val;
+    char scale_vals[] = "testing";
+    char* scale = scale_vals;
+    //printf("\nScale ptr: \%c\n", *scale);
+    //*scale = 'p';
+    //printf("\nScale ptr: \%c\n", *scale);
+    //validate_and_parse_input(i, temperature, scale);
+    //printf("\nTemperature: %f\n", *temperature);
+    //printf("\nScale ptr: \%c\n", *scale);
+    //printf("\nTemp: %f\n",fahrenheit_to_celsius(34.3));
 }
