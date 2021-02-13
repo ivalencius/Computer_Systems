@@ -56,7 +56,7 @@ int is_integer(char* input){
     for(int i = 1; input[i] !=0; i++) {
         // If not a digit, return ERROR.
         c = input[i];
-        if (!is_digit(c))
+        if (is_digit(c) == SUCCESS)
             return ERROR;
     }
     return SUCCESS;
@@ -76,9 +76,9 @@ int validate_and_parse_input(char * input, double * temperature, char * scale) {
     strcpy(input_copy, input); 
     input_copy[length-1] = '\0';
     // Check if floating point
-    if (!is_floating_point_number(input_copy))
+    if (is_floating_point_number(input_copy) == SUCCESS)
         *temperature = strtod(input_copy, NULL);
-    else if (!is_integer(input_copy))
+    else if (is_integer(input_copy) == SUCCESS)
         *temperature = (double)atoi(input_copy);
     else 
         return ERROR;
@@ -98,34 +98,42 @@ double fahrenheit_to_celsius(double fahrenheit) {
 
 // Prints error message for bad input.
 void print_usage() {
-    printf("ERROR: PLEASE ENTER INPUT IN VALID FORMAT");
+    printf("\nERROR: PLEASE ENTER INPUT IN VALID FORMAT\n");
 }
 
 // Prints correct output based on cases from validate_and_parse
 void print_output(double celsius, double fahrenheit, char scale) {
     if (scale == 'C')
-        printf("\nCelsius: %f | Fahrenheit: %f", celsius, fahrenheit);
+        printf("\nCelsius: %f | Fahrenheit: %f\n", celsius, fahrenheit);
     else if (scale == 'F')
-        printf("\nFahrenheit: %f | Celsius: %f", fahrenheit, celsius);
+        printf("\nFahrenheit: %f | Celsius: %f\n", fahrenheit, celsius);
     else
         printf("INTERNAL ERROR: SCALE IMPROPER VALUE");
 }
 
 // Gets input and organizes function calls
 int main(int argc, char *argv[]) {
-    char* f = "+25.43F";
-    char* i = "-1249C";
-    //int length = strlen(f);
-    //printf("\nInput ptr: \%c\n", f[length-1]);
-    double temperature_val;
-    double* temperature = &temperature_val;
-    char scale_vals[] = "testing";
-    char* scale = scale_vals;
-    //printf("\nScale ptr: \%c\n", *scale);
-    //*scale = 'p';
-    //printf("\nScale ptr: \%c\n", *scale);
-    //validate_and_parse_input(i, temperature, scale);
-    //printf("\nTemperature: %f\n", *temperature);
-    //printf("\nScale ptr: \%c\n", *scale);
-    //printf("\nTemp: %f\n",fahrenheit_to_celsius(34.3));
+    if (argc != 2) {
+        print_usage();
+        return 0;
+    }
+    else {
+        double temperature;
+        char scale;
+        char* input = argv[1];
+        int result = validate_and_parse_input(input, &temperature, &scale);
+        if(result == ERROR) {
+            print_usage();
+            return 0;
+        }
+        else {
+            printf("%c",scale);
+            if (scale == 'C')
+                print_output(temperature,celsius_to_farenheit(temperature), scale);
+            else
+                print_output(fahrenheit_to_celsius(temperature), temperature,scale);
+            return 0;
+        }
+
+    }
 }
