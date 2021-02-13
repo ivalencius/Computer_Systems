@@ -25,7 +25,6 @@ int is_floating_point_number(char* input){
     // Checks if first char is either a digit or '+'/'-'.
     if (!(is_digit(c) || c == '+') || (c == '-'))
         return ERROR;
-
     // Indicates the presence of the required '.' in the string.
     bool dot = false;
     for(int i = 1; input[i] !=0; i++) {
@@ -52,7 +51,6 @@ int is_integer(char* input){
     // Checks if first char is either a digit or '+'/'-'.
     if (!(is_digit(c) || (c == '+') || (c == '-')))
         return ERROR;
-
     for(int i = 1; input[i] !=0; i++) {
         // If not a digit, return ERROR.
         c = input[i];
@@ -62,7 +60,7 @@ int is_integer(char* input){
     return SUCCESS;
 }
 
-//Checks if string ends in 'C' or 'F' then stores the string as a double in &temperature.
+// Checks if string ends in 'C' or 'F' then stores the string as a double in &temperature.
 int validate_and_parse_input(char * input, double * temperature, char * scale) {
     int length = strlen(input);
     // Determine if terminating char is 'C' or 'F'
@@ -86,12 +84,12 @@ int validate_and_parse_input(char * input, double * temperature, char * scale) {
 
 }
 
-//Converts celcius to fahrenheit.
+// Converts celcius to fahrenheit.
 double celsius_to_farenheit(double celsius) {
     return ((celsius * 9) / (double) 5) + 32;
 }
 
-//Converts fahrenheit to celcius.
+// Converts fahrenheit to celcius.
 double fahrenheit_to_celsius(double fahrenheit) {
     return (fahrenheit - 32) * 5 / (double) 9;
 }
