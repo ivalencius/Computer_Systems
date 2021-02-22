@@ -84,14 +84,27 @@ void insert_element(List * list, int value, int index) {
 */
 void remove_element(List * list, int index) {
     // If the index is nonsensical, just ignore it.
-    if ((index < 0) || (index >= list->length)) { //BROKEn
+    if ((index < 0)) {
         printf("Invalid Index\n");
         return;
+    }
+    // Remove last item
+    else if ((index >= list->length)) {
+        Node * current = list->head;
+        // Stop at second to last element
+         for (int i = 0; i < list->length - 2; ++i) {
+            current = current->next;
+        }
+        Node* removable = current-> next;
+        current->next = NULL;
+        free(removable);
     }
     // Index 0
     else if (index == 0) {
         printf("Stopped at 0\n");
+        Node* removable = list->head;
         list->head = list->head->next;
+        free(removable);
     }
     // Index 
     else {
@@ -103,7 +116,9 @@ void remove_element(List * list, int index) {
             current = current-> next;
             index_counter++;
         }
+        Node* removable = current-> next;
         current->next = current->next->next;
+        free(removable);
     }
     // Decrement list length
     --list->length;
