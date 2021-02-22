@@ -76,13 +76,37 @@ void insert_element(List * list, int value, int index) {
         current->next = new_node;
         new_node->next = rest;
     }
-    ++list->length;
+    ++list->length; 
 }
 
 /*
 * Removes an element from the list specified at list index
 */
 void remove_element(List * list, int index) {
+    // If the index is nonsensical, just ignore it.
+    if ((index < 0) || (index >= list->length)) { //BROKEn
+        printf("Invalid Index\n");
+        return;
+    }
+    // Index 0
+    else if (index == 0) {
+        printf("Stopped at 0\n");
+        list->head = list->head->next;
+    }
+    // Index 
+    else {
+        printf("Reached here\n");
+        Node * current = list->head;
+        int index_counter = 0;
+        // Stop 1 before index
+        while (index_counter != index-1) {
+            current = current-> next;
+            index_counter++;
+        }
+        current->next = current->next->next;
+    }
+    // Decrement list length
+    --list->length;
 }
 /*
  * Prints a visualization of the list.
@@ -94,6 +118,7 @@ void print_list(List * list) {
         current = current->next;
     }
     printf("null\n");
+    printf("\tList Length: %d\n",list->length);
 }
 
 /*
@@ -119,6 +144,7 @@ int main(int argc, char * argv[]) {
     int value;
     int index;
     List list;
+    list.length = 0;
     printf(USAGE);
     printf("> ");
     while (scanf("%c", &c) != EOF) {
@@ -135,6 +161,11 @@ int main(int argc, char * argv[]) {
             case 'i':
                 scanf("%d %d", &value, &index);
                 insert_element(&list, value, index);
+                print_list(&list);
+                break;
+            case 'r':
+                scanf("%d", &index);
+                remove_element(&list,index);
                 print_list(&list);
                 break;
             default:
