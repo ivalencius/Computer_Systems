@@ -76,29 +76,29 @@ void print_exponent(unsigned int num) {
 
 // Prints the mantissa binary (with added 1) and in decimal
 void print_mantissa(unsigned int num) {
+    unsigned int mant_mask = 0x7fffff;
+    unsigned int mantissa = num & mant_mask;
     unsigned int shift = 22;
     unsigned int mask = 1 << shift;
     unsigned int inverse_mask = ~mask;
     float value = 1.0;
     float weight = 1.0;
     char binary[32] = "";
-    while(num) {
-        unsigned result = mask & num;
+    while(mantissa) {
+        unsigned result = mask & mantissa;
         result = result >> shift;
         char result_char = result + '0';
-        //putchar(result_char);
         // Adjust weights and value 
         weight /= 2.0;
         value += result * weight;
         strncat(binary, &result_char,1);
-        num = num & inverse_mask;
+        //printf("\n\t\tNew binary: %s",binary);
+        mantissa = mantissa & inverse_mask;
         mask >>= 1;
         inverse_mask >>= 1;
         --shift;
     }
-    // Weed out extra zeros from binary string
-    //while(binary[strlen(binary)-1] = '0')
-    //    binary[strlen(binary)-1] = '\0';
+    
     printf("\n\nMantissa:");
     printf("\n\tbinary (with added 1): 1.%s",binary);
     printf("\n\tdecimal: %f", value);
